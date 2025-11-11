@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.mapper.ClubMapper">
+
+    <resultMap id="ClubMap" type="com.club.entity.Club">
+        <id property="clubId" column="club_id"/>
+        <result property="name" column="name"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="description" column="description"/>
+        <result property="charter" column="charter"/>
+        <result property="founderId" column="founder_id"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <sql id="table_columns">
+        club_id,
+        name,
+        category_id,
+        description,
+        charter,
+        founder_id,
+        status,
+        created_at
+    </sql>
+
+</mapper>

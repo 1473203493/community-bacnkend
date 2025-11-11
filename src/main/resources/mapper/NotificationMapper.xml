@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.mapper.NotificationMapper">
+
+    <resultMap id="NotificationMap" type="com.club.entity.Notification">
+        <id property="noticeId" column="notice_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="isRead" column="is_read"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <sql id="table_columns">
+        notice_id,
+        user_id,
+        title,
+        content,
+        is_read,
+        created_at
+    </sql>
+
+</mapper>
