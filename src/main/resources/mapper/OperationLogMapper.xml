@@ -5,6 +5,7 @@
     <resultMap id="OperationLogMap" type="com.club.entity.OperationLog">
         <id property="logId" column="log_id"/>
         <result property="userId" column="user_id"/>
+        <result property="adminId" column="admin_id"/>
         <result property="action" column="action"/>
         <result property="ipAddress" column="ip_address"/>
         <result property="createdAt" column="created_at"/>
@@ -13,9 +14,16 @@
     <sql id="table_columns">
         log_id,
         user_id,
+        admin_id,
         action,
         ip_address,
         created_at
     </sql>
+    
+    <!-- 插入操作日志 -->
+    <insert id="insert" parameterType="com.club.entity.OperationLog" useGeneratedKeys="true" keyProperty="logId">
+        INSERT INTO operation_log(user_id, admin_id, action, ip_address, created_at)
+        VALUES (#{userId}, #{adminId}, #{action}, #{ipAddress}, #{createdAt})
+    </insert>
 
 </mapper>

@@ -1,7 +1,6 @@
 package com.club.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -17,8 +16,11 @@ public class OperationLog {
     @Schema(description = "日志ID")
     private Integer logId;
 
-    @Schema(description = "操作人")
+    @Schema(description = "学生或社团管理员")
     private Integer userId;
+
+    @Schema(description = "平台管理员")
+    private Integer adminId;
 
     @Schema(description = "操作内容")
     private String action;
