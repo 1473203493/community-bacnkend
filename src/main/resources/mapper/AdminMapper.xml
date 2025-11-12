@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.club.mapper.UserMapper">
+<mapper namespace="com.club.mapper.AdminMapper">
 
 <!--下面这两个只作提示效果，具体不一定使用上，其他mapper.xml同理-->
 
 <!--    实体类的字段(property) 对应  数据库的字段 (column)-->
-    <resultMap id="UserMap" type="com.club.entity.User">
+    <resultMap id="AdminMap" type="com.club.entity.Admin">
         <id property="userId" column="user_id"/>
-        <result property="openid" column="openid"/>
-        <result property="studentNo" column="student_no"/>
+        <result property="adminNo" column="admin_no"/>
+        <result property="userName" column="user_name"/>
         <result property="name" column="name"/>
         <result property="email" column="email"/>
         <result property="password" column="password"/>
@@ -20,7 +20,8 @@
 <!--    该表所含有的字段-->
     <sql id="table_columns">
         user_id,
-        student_no,
+        admin_no,
+        user_name,
         name,
         email,
         password,

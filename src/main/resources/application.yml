@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: club-management-be
+  profiles:
+    active: dev
+  jackson:
+    time-zone: Asia/Shanghai

@@ -17,8 +17,11 @@ public class Notification {
     @Schema(description = "通知ID")
     private Integer noticeId;
 
-    @Schema(description = "接收者ID")
+    @Schema(description = "学生或社团管理员")
     private Integer userId;
+
+    @Schema(description = "平台管理员")
+    private Integer adminId;
 
     @Schema(description = "通知标题")
     private String title;
