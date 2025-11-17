@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.mapper.HomeMapper">
+
+    <!-- 热门社团推荐（按时间排序） -->
+    <select id="selectHotClubs" resultType="com.club.entity.vo.ClubSimpleVO">
+        SELECT
+        c.club_id AS clubId,
+        c.name,
+        c.description,
+        cc.name AS categoryName,
+        c.created_at AS createdAt,
+        (SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = c.club_id AND cm.join_status = '2') AS memberCount
+        FROM club c
+        LEFT JOIN club_category cc ON c.category_id = cc.category_id
+        WHERE c.status = '2'  <!-- 已启动的社团 -->
+        ORDER BY c.created_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 人气社团推荐（按人数前三排序） -->
+    <select id="selectPopularClubs" resultType="com.club.entity.vo.ClubSimpleVO">
+        SELECT
+            c.club_id AS clubId,
+            c.name,
+            c.description,
+            cc.name AS categoryName,
+            c.created_at AS createdAt,
+            (SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = c.club_id AND cm.join_status = '2') AS memberCount
+        FROM club c
+                 LEFT JOIN club_category cc ON c.category_id = cc.category_id
+        WHERE c.status = '2'
+        ORDER BY memberCount DESC
+        LIMIT #{limit}
+    </select>
+</mapper>

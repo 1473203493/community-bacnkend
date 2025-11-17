@@ -22,4 +22,32 @@
         joined_at
     </sql>
 
+    <!-- 根据社团ID和用户ID查询成员 -->
+    <select id="selectMemberByUserIdAndClubId" resultMap="ClubMemberMap">
+        SELECT *
+        FROM club_member
+        WHERE club_id = #{clubId}
+        AND user_id = #{userId}
+        AND join_status = '2'  <!-- 只查询已加入的成员 -->
+    </select>
+
+    <!-- 查询社团成员列表 -->
+    <select id="selectMembersByClubId" resultMap="ClubMemberMap">
+        SELECT * FROM club_member
+        WHERE club_id = #{clubId}
+          AND join_status = '2'
+    </select>
+
+    <!-- 调整成员角色 -->
+    <update id="updateMemberRole">
+        UPDATE club_member
+        SET role = #{newRole},
+        apply_reason = #{reason},
+        joined_at = joined_at  <!-- 维持不变 -->
+        WHERE club_id = #{clubId}
+        AND user_id = #{userId}
+        AND join_status = '2'
+    </update>
+
+
 </mapper>

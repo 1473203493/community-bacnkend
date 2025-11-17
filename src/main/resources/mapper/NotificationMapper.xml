@@ -21,10 +21,11 @@
         is_read,
         created_at
     </sql>
-    
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="noticeId">
         INSERT INTO notification(user_id, admin_id, title, content, is_read, created_at)
         VALUES (#{userId}, #{adminId}, #{title}, #{content}, #{isRead}, #{createdAt})
     </insert>
+
 
 </mapper>
