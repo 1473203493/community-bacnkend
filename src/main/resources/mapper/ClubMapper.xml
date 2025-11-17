@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.mapper.ClubMapper">
+
+    <resultMap id="ClubMap" type="com.club.entity.Club">
+        <id property="clubId" column="club_id"/>
+        <result property="name" column="name"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="description" column="description"/>
+        <result property="charter" column="charter"/>
+        <result property="founderId" column="founder_id"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <sql id="table_columns">
+        club_id,
+        name,
+        category_id,
+        description,
+        charter,
+        founder_id,
+        status,
+        created_at
+    </sql>
+
+
+    <select id="searchClubs" resultType="com.club.entity.vo.ClubSimpleVO">
+        SELECT
+        c.club_id AS clubId,
+        c.name,
+        c.description,
+        c.created_at AS createdAt,
+        cc.name AS categoryName,
+        (
+        SELECT COUNT(*)
+        FROM club_member cm
+        WHERE cm.club_id = c.club_id
+        AND cm.join_status = '2'
+        ) AS memberCount
+        FROM club c
+        LEFT JOIN club_category cc ON c.category_id = cc.category_id
+        WHERE 1 = 1
+
+        <if test="keyword != null and keyword != ''">
+            AND c.name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+
+        <if test="categoryId != null">
+            AND c.category_id = #{categoryId}
+        </if>
+
+        ORDER BY c.created_at DESC
+    </select>
+
+    <!-- 新增社团 -->
+    <insert id="insertClub" parameterType="com.club.entity.Club" useGeneratedKeys="true" keyProperty="clubId">
+        INSERT INTO club (name, category_id, description, charter, founder_id, status, created_at)
+        VALUES (#{name}, #{categoryId}, #{description}, #{charter}, #{founderId}, #{status}, #{createdAt})
+    </insert>
+
+    <!-- 查询社团名称是否已存在 -->
+    <select id="countByName" resultType="int">
+        SELECT COUNT(*) FROM club WHERE name = #{name}
+    </select>
+
+    <!-- 根据社团ID查询社团 -->
+    <select id="selectById" resultMap="ClubMap">
+        SELECT
+        <include refid="table_columns"/>
+        FROM club
+        WHERE club_id = #{clubId}
+    </select>
+
+    <!-- 查询用户加入的社团 -->
+    <select id="selectByUserId" resultMap="ClubMap">
+        SELECT c.*
+        FROM club c
+        INNER JOIN club_member cm ON c.club_id = cm.club_id
+        WHERE cm.user_id = #{userId} AND cm.join_status = '2'  <!-- '2'表示已加入 -->
+        ORDER BY c.created_at DESC
+    </select>
+
+</mapper>

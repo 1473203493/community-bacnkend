@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.mapper.ActivitySignupMapper">
+
+    <resultMap id="ActivitySignupMap" type="com.club.entity.ActivitySignup">
+        <id property="signupId" column="signup_id"/>
+        <result property="activityId" column="activity_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+        <result property="reason" column="reason"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <sql id="table_columns">
+        signup_id,
+        activity_id,
+        user_id,
+        status,
+        reason,
+        created_at
+    </sql>
+
+    <!-- 查询某活动所有报名 -->
+    <select id="selectByActivityId" resultMap="ActivitySignupMap">
+        SELECT *
+        FROM activity_signup
+        WHERE activity_id = #{activityId}
+        ORDER BY created_at ASC
+    </select>
+
+    <!-- 查询单条报名 -->
+    <select id="selectById" resultMap="ActivitySignupMap">
+        SELECT *
+        FROM activity_signup
+        WHERE signup_id = #{signupId}
+    </select>
+
+    <!-- 更新报名审核状态 -->
+    <update id="updateStatus">
+        UPDATE activity_signup
+        SET status = #{status},
+            reason = #{reason}
+        WHERE signup_id = #{signupId}
+    </update>
+
+    <!-- 统计某活动已通过报名人数 -->
+    <select id="countApprovedByActivityId" resultType="int">
+        SELECT COUNT(*)
+        FROM activity_signup
+        WHERE activity_id = #{activityId}
+        AND status = '1'  <!-- 1表示通过 -->
+    </select>
+
+    <!-- 查询某活动未审核的报名 -->
+    <select id="selectPendingByActivityId" resultMap="ActivitySignupMap">
+        SELECT *
+        FROM activity_signup
+        WHERE activity_id = #{activityId}
+          AND status = '1'
+        ORDER BY created_at ASC
+    </select>
+
+    <!-- 查询某活动已通过的报名 -->
+    <select id="selectApprovedByActivityId" resultMap="ActivitySignupMap">
+        SELECT *
+        FROM activity_signup
+        WHERE activity_id = #{activityId}
+          AND status = '2'
+        ORDER BY created_at ASC
+    </select>
+
+</mapper>
