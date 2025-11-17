@@ -17,7 +17,7 @@ import com.club.util.AuthContextUtil;
  * @date 2025/11/11 22:08
  */
 @Tag(name = "用户接口")
-@RestController
+@RestController("studentUserController")
 @RequestMapping("/user")
 public class UserController {
 
