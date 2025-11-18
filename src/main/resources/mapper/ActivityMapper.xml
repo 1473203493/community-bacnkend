@@ -13,8 +13,6 @@
         <result property="needAudit" column="need_audit"/>
         <result property="status" column="status"/>
         <result property="createdAt" column="created_at"/>
-        <result property="startTime" column="start_time"/>
-        <result property="endTime" column="end_time"/>
     </resultMap>
 
     <sql id="table_columns">
@@ -29,60 +27,5 @@
         status,
         created_at
     </sql>
-
-    <select id="searchActivities" resultType="java.util.Map">
-        SELECT
-        a.activity_id,
-        a.title,
-        a.description,
-        a.location,
-        a.time,
-        a.status,
-        c.name AS clubName,
-        cc.name AS categoryName
-        FROM activity a
-        LEFT JOIN club c ON a.club_id = c.club_id
-        LEFT JOIN club_category cc ON c.category_id = cc.category_id
-        WHERE 1 = 1
-
-        <if test="keyword != null and keyword != ''">
-            AND a.title LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-
-        <if test="categoryId != null">
-            AND c.category_id = #{categoryId}
-        </if>
-
-        ORDER BY a.time DESC
-    </select>
-
-    <insert id="insertActivity" parameterType="com.club.entity.Activity" useGeneratedKeys="true" keyProperty="activityId">
-        INSERT INTO activity
-        (club_id, title, description, location, time, start_time, end_time, quota, need_audit, status, created_at)
-        VALUES
-            (#{clubId}, #{title}, #{description}, #{location}, #{time}, #{startTime}, #{endTime}, #{quota}, #{needAudit}, #{status}, #{createdAt})
-    </insert>
-
-
-    <!-- 查询活动 -->
-    <select id="selectById" resultMap="ActivityMap">
-        SELECT *
-        FROM activity
-        WHERE activity_id = #{activityId}
-    </select>
-    <!-- 更新活动状态 -->
-    <update id="updateActivityStatus">
-        UPDATE activity
-        SET status = #{status}
-        WHERE activity_id = #{activityId}
-    </update>
-
-    <!-- 查询某个社团的所有活动 -->
-    <select id="selectByClubId" resultMap="ActivityMap">
-        SELECT *
-        FROM activity
-        WHERE club_id = #{clubId}
-        ORDER BY time DESC
-    </select>
 
 </mapper>
