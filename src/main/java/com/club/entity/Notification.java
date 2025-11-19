@@ -34,4 +34,12 @@ public class Notification {
 
     @Schema(description = "发送时间")
     private LocalDateTime createdAt;
+
+    public Boolean getRead() {
+        return isRead;
+    }
+
+    public void setRead(Boolean read) {
+        isRead = read;
+    }
 }

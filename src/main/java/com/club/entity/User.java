@@ -32,7 +32,7 @@ public class User {
     @Schema(description = "密码（加密存储）")
     private String password;
 
-    @Schema(description = "角色类型")
+    @Schema(description = "角色类型（学生或者社团管理员）")
     private String role;
 
     @Schema(description = "账号状态")

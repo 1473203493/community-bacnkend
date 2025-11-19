@@ -35,7 +35,7 @@ public class Admin {
     @Schema(description = "邮箱")
     private String email;
 
-    @Schema(description = "角色类型")
+    @Schema(description = "角色类型（平台管理员）")
     private String role;
 
     @Schema(description = "账号状态")
