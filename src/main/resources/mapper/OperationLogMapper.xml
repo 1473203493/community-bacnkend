@@ -26,4 +26,21 @@
         VALUES (#{userId}, #{adminId}, #{action}, #{ipAddress}, #{createdAt})
     </insert>
 
+    <select id="list" resultType="com.club.entity.admin.vo.OperationLogVO">
+        SELECT
+            ol.log_id,
+            ol.user_id,
+            ol.admin_id,
+            ol.action,
+            ol.ip_address,
+            ol.created_at,
+            COALESCE(u.student_no, a.admin_no) AS student_no,
+            COALESCE(a.admin_no, u.student_no) AS admin_no,
+            COALESCE(u.role, a.role) AS role
+        FROM operation_log ol
+                 LEFT JOIN user u ON ol.user_id = u.user_id
+                 LEFT JOIN admin a ON ol.admin_id = a.user_id
+        ORDER BY ol.created_at DESC
+    </select>
+
 </mapper>
