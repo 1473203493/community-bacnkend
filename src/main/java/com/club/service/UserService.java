@@ -1,7 +1,9 @@
 package com.club.service;
 
 import com.club.entity.User;
+import com.club.entity.request.UserQueryDto;
 import com.club.entity.vo.UserLoginVo;
+import com.github.pagehelper.PageInfo;
 
 public interface UserService {
 
@@ -26,4 +28,8 @@ public interface UserService {
      * @param openid
      */
     void removeUserInfo(String openid);
+
+    PageInfo<User> getUserList(UserQueryDto userQueryDto);
+
+    void updateUserStatus(Integer userId, String status);
 }

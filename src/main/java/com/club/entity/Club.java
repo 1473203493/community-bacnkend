@@ -32,9 +32,20 @@ public class Club {
     @Schema(description = "创建人")
     private Integer founderId;
 
-    @Schema(description = "社团状态")
+    @Schema(description = "社团状态：1.待平台管理员确认,2.启动(激活),3.停用(冻结)")
     private String status;
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;
+
+    //2025.11.79 -添加 -wsx
+    // 扩展字段（用于列表展示，数据库无对应字段，通过关联查询赋值）
+    @Schema(description = "负责人姓名")
+    private String founderName;
+
+    @Schema(description = "负责人邮箱")
+    private String founderEmail;
+
+    @Schema(description = "分类名称")
+    private String categoryName;
 }

@@ -29,4 +29,26 @@
         created_at
     </sql>
 
+    <select id="getUserList" parameterType="com.club.entity.request.UserQueryDto" resultMap="UserMap">
+        <!-- 包含 password 字段，其他字段不变，排除 openid -->
+        SELECT user_id, student_no, name, email, password, role, status, created_at
+        FROM user
+        <where>
+            <!-- 原有查询条件保持不变 -->
+            <if test="studentNo != null and studentNo != ''">
+                AND student_no LIKE CONCAT('%', #{studentNo}, '%')
+            </if>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="role != null and role != ''">
+                AND role = #{role}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY created_at DESC
+    </select>
+
 </mapper>

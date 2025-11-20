@@ -2,10 +2,14 @@ package com.club.mapper;
 
 import com.club.entity.User;
 import org.apache.ibatis.annotations.*;
+import com.club.entity.request.UserQueryDto;
+
+import java.util.List;
+
 
 @Mapper
 public interface UserMapper {
-
+    List<User> getUserList(UserQueryDto userQueryDto);
     /**
      * 根据用户ID查询用户信息
      * @param userId
@@ -39,5 +43,8 @@ public interface UserMapper {
 
     @Delete("delete from user where openid = #{openid}")
     void removeUserInfo(String openid);
+
+    @Update("update user set status=#{status} where user_id = #{userId}")
+    void updateStatus(@Param("userId") Integer userId, @Param("status") String status);
 
 }

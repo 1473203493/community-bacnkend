@@ -27,10 +27,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 平台管理员端拦截器，只拦截/admin/**路径 ，
-        registry.addInterceptor(loginAuthInterceptor)
-                .excludePathPatterns("/admin/login" ,
-                        "/admin/generateValidateCode") //开放登录接口和验证码接口
-                .addPathPatterns("/admin/**");  // 只拦截/admin开头的请求
+//        registry.addInterceptor(loginAuthInterceptor)
+//                .excludePathPatterns("/admin/login" ,
+//                        "/admin/generateValidateCode") //开放登录接口和验证码接口
+//                .addPathPatterns("/admin/**");  // 只拦截/admin开头的请求
 
         // 注册用户端（学生或社团管理员）拦截器
         registry.addInterceptor(jwtTokenUserInterceptor)

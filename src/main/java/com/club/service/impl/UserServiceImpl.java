@@ -8,6 +8,8 @@ import com.club.service.UserService;
 import com.club.util.JwtUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,12 @@ import com.club.entity.vo.ResultCodeEnum;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import com.club.entity.request.UserQueryDto;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -117,5 +124,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserInfo(User user) {
         userMapper.update( user);
+    }
+
+    //admin用于获取用户列表 --wsx -2025.11.17
+    @Override
+    public PageInfo<User> getUserList(UserQueryDto userQueryDto) {
+        PageHelper.startPage(userQueryDto.getPageNum(), userQueryDto.getPageSize());
+        List<User> users= userMapper.getUserList(userQueryDto);
+        return new PageInfo<>( users);
+    }
+
+    @Override
+    public void updateUserStatus(Integer userId, String status) {
+        // 验证状态值是否合法
+//        if (!"1".equals(status) && !"2".equals(status)) {
+//            throw new ClubDefinedException(ResultCodeEnum.PARAM_ERROR);
+//        }
+
+        // 验证用户是否存在
+        User user = userMapper.getUserById(Long.valueOf(userId));
+        if (user == null) {
+            throw new ClubDefinedException(ResultCodeEnum.USER_NOT_EXIST);
+        }
+
+        // 更新用户状态
+        userMapper.updateStatus(userId, status);
+        log.info("更新用户状态成功，用户ID: {}, 新状态: {}", userId, status);
     }
 }

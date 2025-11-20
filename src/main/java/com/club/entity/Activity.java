@@ -43,10 +43,4 @@ public class Activity {
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;
-
-    @Schema(description = "活动开始时间")
-    private LocalDateTime startTime;
-
-    @Schema(description = "活动结束时间")
-    private LocalDateTime endTime;
 }

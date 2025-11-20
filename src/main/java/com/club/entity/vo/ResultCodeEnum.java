@@ -20,7 +20,7 @@ public enum ResultCodeEnum {
     STOCK_LESS( 219, "库存不足"),
     WX_ERROR( 210, "微信服务异常"),
 
-    ;
+    USER_NOT_EXIST(211,"用户不存在" );
 
     private Integer code ;      // 业务状态码
     private String message ;    // 响应消息

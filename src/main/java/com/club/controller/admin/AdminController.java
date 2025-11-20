@@ -2,15 +2,23 @@ package com.club.controller.admin;
 
 
 import com.club.aspect.LogOperation;
+import com.club.entity.Club;
+import com.club.entity.User;
 import com.club.entity.request.AdminLoginDto;
+import com.club.entity.request.ClubQueryDto;
+import com.club.entity.request.UserQueryDto;
 import com.club.entity.vo.AdminLoginVo;
 import com.club.entity.vo.Result;
 import com.club.entity.vo.ResultCodeEnum;
 import com.club.entity.vo.ValidateCodeVo;
 import com.club.service.AdminService;
+import com.club.service.ClubService;
+import com.club.service.UserService;
 import com.club.service.ValidateCodeService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +36,21 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ValidateCodeService validateCodeService;
+
+    @Autowired
+    private ClubService clubService;
 
     @LogOperation("管理员登录")
     @Operation(summary = "管理员登录接口")
     @PostMapping("/login")
     public Result<AdminLoginVo> login(@RequestBody AdminLoginDto adminLoginDto) {
         log.info("管理员登录接口") ;
-        AdminLoginVo adminLoginVo = adminService.login(adminLoginDto) ;
-        return Result.build(adminLoginVo, ResultCodeEnum.SUCCESS) ;
+        AdminLoginVo adminLoginVo = adminService.login(adminLoginDto);
+        return Result.build(adminLoginVo, ResultCodeEnum.SUCCESS);
     }
 
 
@@ -48,5 +62,51 @@ public class AdminController {
         ValidateCodeVo validateCodeVo = validateCodeService.generateValidateCode();
         return Result.build(validateCodeVo , ResultCodeEnum.SUCCESS) ;
     }
+
+    @LogOperation("查询用户列表")
+    @Operation(summary = "分页查询用户信息")
+    @GetMapping("/getUsersList")
+    public Result<PageInfo<User>> getUserList(
+        @RequestParam(required = false) String studentNo,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String role,
+        @RequestParam(required = false) String status,
+        @RequestParam(defaultValue = "1") Integer pageNum,
+        @RequestParam(defaultValue = "10") Integer pageSize) {
+
+    UserQueryDto userQueryDto = new UserQueryDto();
+    userQueryDto.setStudentNo(studentNo);
+    userQueryDto.setName(name);
+    userQueryDto.setRole(role);
+    userQueryDto.setStatus(status);
+    userQueryDto.setPageNum(pageNum);
+    userQueryDto.setPageSize(pageSize);
+
+    PageInfo<User> pageInfo = userService.getUserList(userQueryDto);
+    return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
+}
+
+    @LogOperation("更新用户状态")
+    @Operation(summary = "启用/禁用用户账号")
+    @PutMapping("/updateUserStatus")
+    public Result<String> updateUserStatus(
+            @RequestParam Integer userId,
+            @RequestParam String status) {
+
+        userService.updateUserStatus(userId, status);
+        return Result.build(null, ResultCodeEnum.SUCCESS);
+    }
+
+    @LogOperation("查看社团列表")
+    @Operation(summary = "获取社团列表", description = "支持筛选条件：状态（待审批/正常/冻结/拒绝）、分类、负责人邮箱（模糊搜索）")
+    @GetMapping("/club/list")
+    public Result<PageInfo<Club>> getClubList(ClubQueryDto queryDto) {
+        // 调用服务层分页查询
+        PageInfo<Club> pageInfo = clubService.getClubList(queryDto);
+        log.info("管理员查询社团列表成功，筛选条件：{}，当前页码：{}，每页条数：{}",
+                queryDto, queryDto.getPageNum(), queryDto.getPageSize());
+        return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
+    }
+
 
 }
