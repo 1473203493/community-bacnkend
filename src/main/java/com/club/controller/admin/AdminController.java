@@ -5,6 +5,7 @@ import com.club.aspect.LogOperation;
 import com.club.entity.Club;
 import com.club.entity.User;
 import com.club.entity.request.AdminLoginDto;
+import com.club.entity.request.ClubApprovalDto;
 import com.club.entity.request.ClubQueryDto;
 import com.club.entity.request.UserQueryDto;
 import com.club.entity.vo.AdminLoginVo;
@@ -108,5 +109,20 @@ public class AdminController {
         return Result.build(pageInfo, ResultCodeEnum.SUCCESS);
     }
 
+    @LogOperation("查看社团审批详情")
+    @Operation(summary = "获取社团详情（审批用）", description = "返回社团章程、负责人信息、分类等完整数据")
+    @GetMapping("/club/{clubId}")
+    public Result<Club> getClubDetail(@PathVariable Integer clubId) {
+        Club club = clubService.getClubDetail(clubId);
+        return Result.build(club, ResultCodeEnum.SUCCESS);
+    }
+
+    @LogOperation("审批社团")
+    @Operation(summary = "社团审批操作", description = "status=2(同意)，status=4(拒绝)；拒绝时必须传rejectReason")
+    @PostMapping("/club/approve")
+    public Result<String> approveClub(@RequestBody ClubApprovalDto approvalDto) {
+        clubService.approveClub(approvalDto);
+        return Result.build(null, ResultCodeEnum.SUCCESS);
+    }
 
 }

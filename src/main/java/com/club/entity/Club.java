@@ -32,7 +32,7 @@ public class Club {
     @Schema(description = "创建人")
     private Integer founderId;
 
-    @Schema(description = "社团状态：1.待平台管理员确认,2.启动(激活),3.停用(冻结)")
+    @Schema(description = "社团状态：1.待平台管理员确认,2.启动(激活),3.停用(冻结),4.拒绝")
     private String status;
 
     @Schema(description = "创建时间")

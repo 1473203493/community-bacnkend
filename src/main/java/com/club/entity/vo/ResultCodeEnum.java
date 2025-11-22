@@ -20,7 +20,14 @@ public enum ResultCodeEnum {
     STOCK_LESS( 219, "库存不足"),
     WX_ERROR( 210, "微信服务异常"),
 
-    USER_NOT_EXIST(211,"用户不存在" );
+    USER_NOT_EXIST(211,"用户不存在" ),
+    // 新增社团相关异常码
+    PARAM_ERROR(212, "参数错误"),
+    REJECT_REASON_REQUIRED(213,"驳回需要填写理由"),
+    CLUB_NOT_EXIST(214, "社团不存在"),
+    CLUB_STATUS_NOT_PENDING(215, "仅待审批状态的社团可操作"),
+    OPERATION_FAIL(216, "操作失败"),
+    CLUB_STATUS_ERROR(217,"社团状态异常");
 
     private Integer code ;      // 业务状态码
     private String message ;    // 响应消息

@@ -3,6 +3,7 @@ package com.club.mapper;
 import com.club.entity.Club;
 import com.club.entity.vo.ClubSimpleVO;
 import com.club.entity.request.ClubQueryDto;
+import com.club.entity.request.ClubApprovalDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,4 +32,10 @@ public interface ClubMapper {
 
 
     List<Club> getClubList(ClubQueryDto queryDto);
+
+    // 根据ID查询社团详情（用于审批查看）
+    Club selectByIdByAdmin(@Param("clubId") Integer clubId);
+
+    // 更新社团审批状态
+    int updateApprovalStatus(ClubApprovalDto approvalDto);
 }
