@@ -37,4 +37,14 @@ public class Result<T> {
         return build(body , resultCodeEnum.getCode() , resultCodeEnum.getMessage()) ;
     }
 
+    // 成功返回，带数据
+    public static <T> Result<T> ok(T data) {
+        return build(data, ResultCodeEnum.SUCCESS);
+    }
+
+    // 失败返回，带消息
+    public static <T> Result<T> fail(String message) {
+        return build(null, ResultCodeEnum.SYSTEM_ERROR.getCode(), message);
+    }
+
 }

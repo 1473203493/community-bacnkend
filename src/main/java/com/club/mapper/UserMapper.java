@@ -6,12 +6,13 @@ import com.club.entity.request.UserQueryDto;
 
 import java.util.List;
 
-
 @Mapper
 public interface UserMapper {
     List<User> getUserList(UserQueryDto userQueryDto);
+
     /**
      * 根据用户ID查询用户信息
+     * 
      * @param userId
      * @return
      */
@@ -20,6 +21,7 @@ public interface UserMapper {
 
     /**
      * 根据微信openid查询用户信息
+     * 
      * @param openid
      * @return
      */
@@ -27,16 +29,45 @@ public interface UserMapper {
     User getByOpenid(String openid);
 
     /**
+     * 根据邮箱查询用户信息
+     *
+     * @param email
+     * @return
+     */
+    @Select("select * from user where email = #{email}")
+    User getByEmail(String email);
+
+    /**
+     * 根据学号查询用户信息
+     *
+     * @param studentNo
+     * @return
+     */
+    @Select("select * from user where student_no = #{studentNo}")
+    User getByStudentNo(String studentNo);
+
+    /**
+     * 根据用户ID查询用户信息（getUserById的别名）
+     *
+     * @param userId
+     * @return
+     */
+    default User getById(Long userId) {
+        return getUserById(userId);
+    }
+
+    /**
      * 保存用户信息
+     * 
      * @param user
      */
     /**
      * 保存用户信息
+     * 
      * @param user
      */
     @Insert("insert into user (openid, student_no, name, email, password, role, status, created_at) values (#{openid}, #{studentNo}, #{name}, #{email}, #{password}, #{role}, #{status}, NOW())")
     void save(User user);
-
 
     @Update("update user set student_no = #{studentNo}, name = #{name}, email = #{email}, password = #{password}, role = #{role}, status = #{status} where user_id = #{userId}")
     void update(User user);

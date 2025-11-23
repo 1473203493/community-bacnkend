@@ -63,7 +63,6 @@ public class UserServiceImpl implements UserService {
         claims.put("userId", user.getUserId());
         String token = JwtUtil.createJWT("club-key", 7200000L, claims); // 例如：签发者为"zyh-app"，有效期1小时
 
-
         // 构造返回结果
         UserLoginVo userLoginVo = UserLoginVo.builder()
                 .id(Long.valueOf(user.getUserId()))
@@ -76,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 调用微信接口获取openid
+     * 
      * @param code 微信登录凭证
      * @return openid
      */
@@ -112,6 +112,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 微信用户退出登录
+     * 
      * @param openid 用户openid
      */
     @Override
@@ -119,27 +120,26 @@ public class UserServiceImpl implements UserService {
         userMapper.removeUserInfo(openid);
     }
 
-
     // 根据用户id修改用户信息
     @Override
     public void updateUserInfo(User user) {
-        userMapper.update( user);
+        userMapper.update(user);
     }
 
-    //admin用于获取用户列表 --wsx -2025.11.17
+    // admin用于获取用户列表 --wsx -2025.11.17
     @Override
     public PageInfo<User> getUserList(UserQueryDto userQueryDto) {
         PageHelper.startPage(userQueryDto.getPageNum(), userQueryDto.getPageSize());
-        List<User> users= userMapper.getUserList(userQueryDto);
-        return new PageInfo<>( users);
+        List<User> users = userMapper.getUserList(userQueryDto);
+        return new PageInfo<>(users);
     }
 
     @Override
     public void updateUserStatus(Integer userId, String status) {
         // 验证状态值是否合法
-//        if (!"1".equals(status) && !"2".equals(status)) {
-//            throw new ClubDefinedException(ResultCodeEnum.PARAM_ERROR);
-//        }
+        // if (!"1".equals(status) && !"2".equals(status)) {
+        // throw new ClubDefinedException(ResultCodeEnum.PARAM_ERROR);
+        // }
 
         // 验证用户是否存在
         User user = userMapper.getUserById(Long.valueOf(userId));

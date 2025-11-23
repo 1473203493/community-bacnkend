@@ -26,4 +26,13 @@ public class UserLoginVo {
     @Schema(description = "令牌")
     private String token;
 
+    @Schema(description = "用户姓名")
+    private String name;
+
+    @Schema(description = "用户邮箱")
+    private String email;
+
+    @Schema(description = "学号")
+    private String studentNo;
+
 }

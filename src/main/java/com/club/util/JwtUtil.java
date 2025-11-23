@@ -59,4 +59,15 @@ public class JwtUtil {
     public static String generateToken(Long id, String openid) {
         return createJWT("zyh", 1000 * 60 * 60 * 24 * 7, Map.of("id", id, "openid", openid));
     }
+
+    /**
+     * Token解密（使用默认密钥）
+     *
+     * @param token 加密后的token
+     * @return
+     */
+    public static Claims parseJWT(String token) {
+        // 使用系统默认密钥"club-key"
+        return parseJWT("club-key", token);
+    }
 }
