@@ -46,7 +46,7 @@ public class OperationLogAspect {
         
         return result;
     }
-    
+
     /**
      * 保存操作日志
      * @param joinPoint 连接点
@@ -55,36 +55,40 @@ public class OperationLogAspect {
      */
     private void saveOperationLog(ProceedingJoinPoint joinPoint, LogOperation logOperation, LocalDateTime startTime) {
         OperationLog operationLog = new OperationLog();
-        
+
         // 设置操作时间
         operationLog.setCreatedAt(startTime);
-        
+
         // 获取当前用户信息
         Long userId = AuthContextUtil.getCurrentUserId();
         String role = AuthContextUtil.getCurrentUserRole();
-        
+
         if (userId != null) {
             if ("admin".equals(role)) {
                 operationLog.setAdminId(userId.intValue());
             } else {
                 operationLog.setUserId(userId.intValue());
             }
+        } else {
+            // 当前没有用户信息，默认设置为系统操作
+            operationLog.setAdminId(1);
         }
-        
+
         // 设置操作描述
         String action = logOperation.value();
         if (action == null || action.isEmpty()) {
             action = joinPoint.getSignature().getName();
         }
         operationLog.setAction(action);
-        
+
         // 获取请求IP地址
         String ipAddress = getClientIpAddress();
         operationLog.setIpAddress(ipAddress);
-        
+
         // 保存日志
         operationLogService.saveOperationLog(operationLog);
     }
+
     
     /**
      * 获取客户端IP地址
