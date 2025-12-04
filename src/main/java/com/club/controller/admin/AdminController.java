@@ -6,10 +6,7 @@ import com.club.entity.Club;
 import com.club.entity.ClubCategory;
 import com.club.entity.User;
 import com.club.entity.request.*;
-import com.club.entity.vo.AdminLoginVo;
-import com.club.entity.vo.Result;
-import com.club.entity.vo.ResultCodeEnum;
-import com.club.entity.vo.ValidateCodeVo;
+import com.club.entity.vo.*;
 import com.club.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,6 +45,8 @@ public class AdminController {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private ActivitySignupService activitySignupService;
     @LogOperation("管理员登录")
     @Operation(summary = "管理员登录接口")
     @PostMapping("/login")
@@ -165,5 +164,11 @@ public class AdminController {
         return activityService.getActivityListForAdmin(queryDto);
     }
 
+    @Operation(summary = "查看活动报名人员列表", description = "管理员查看指定活动的所有报名人员信息")
+    @GetMapping("/activity/{activityId}/signups")
+    public Result<List<ActivitySignupUserVO>> getActivitySignupUsers(
+            @PathVariable Integer activityId) {
+        return activitySignupService.getSignupUsersForAdmin(activityId);
+    }
 
 }

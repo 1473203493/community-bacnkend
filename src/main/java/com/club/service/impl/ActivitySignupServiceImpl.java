@@ -3,6 +3,7 @@ package com.club.service.impl;
 import com.club.entity.Activity;
 import com.club.entity.ActivitySignup;
 import com.club.entity.ClubMember;
+import com.club.entity.vo.ActivitySignupUserVO;
 import com.club.entity.vo.Result;
 import com.club.mapper.ActivityMapper;
 import com.club.mapper.ActivitySignupMapper;
@@ -145,5 +146,39 @@ public class ActivitySignupServiceImpl implements ActivitySignupService {
         // emailService.sendAuditResult(signup.getUserId(), activity, status, reason);
 
         return Result.build(null, 200, "审核成功");
+    }
+
+    @Override
+    public Result<List<ActivitySignupUserVO>> getSignupUsersForAdmin(Integer activityId) {
+        // 1. 检查活动是否存在
+        Activity activity = activityMapper.selectById(activityId);
+        if (activity == null) {
+            return Result.build(null, 404, "活动不存在");
+        }
+
+        // 2. 查询该活动的所有报名用户信息
+        List<ActivitySignupUserVO> signupUsers = activitySignupMapper.selectSignupUsersByActivityId(activityId);
+
+        // 3. 对邮箱进行脱敏处理
+        signupUsers.forEach(vo -> {
+            if (vo.getMaskedEmail() != null && !vo.getMaskedEmail().isEmpty()) {
+                vo.setMaskedEmail(maskEmail(vo.getMaskedEmail()));
+            }
+        });
+
+        return Result.build(signupUsers, 200, "查询成功");
+    }
+
+    // 邮箱脱敏工具方法
+    private String maskEmail(String email) {
+        if (email == null || !email.contains("@")) {
+            return email;
+        }
+        String[] parts = email.split("@");
+        String username = parts[0];
+        if (username.length() <= 3) {
+            return username + "***@" + parts[1];
+        }
+        return username.substring(0, 3) + "***@" + parts[1];
     }
 }

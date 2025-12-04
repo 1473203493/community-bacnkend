@@ -1,6 +1,7 @@
 package com.club.mapper;
 
 import com.club.entity.ActivitySignup;
+import com.club.entity.vo.ActivitySignupUserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -73,4 +74,7 @@ public interface ActivitySignupMapper {
      * @return 活动列表
      */
     List<Map<String, Object>> selectUserActivities(@Param("userId") Long userId);
+
+    // 添加方法
+    List<ActivitySignupUserVO> selectSignupUsersByActivityId(@Param("activityId") Integer activityId);
 }

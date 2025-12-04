@@ -1,6 +1,7 @@
 package com.club.service;
 
 import com.club.entity.ActivitySignup;
+import com.club.entity.vo.ActivitySignupUserVO;
 import com.club.entity.vo.Result;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface ActivitySignupService {
     Result<List<ActivitySignup>> listApprovedSignups(Integer activityId, Integer operatorId);
     // 审核报名
     Result<Void> auditSignup(Integer signupId, Integer operatorId, String status, String reason);
+
+    Result<List<ActivitySignupUserVO>> getSignupUsersForAdmin(Integer activityId);
 }

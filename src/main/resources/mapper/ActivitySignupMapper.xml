@@ -69,4 +69,18 @@
         ORDER BY created_at ASC
     </select>
 
+    <select id="selectSignupUsersByActivityId" resultType="com.club.entity.vo.ActivitySignupUserVO">
+        SELECT
+            s.signup_id as signupId,
+            u.name as name,
+            u.student_no as studentNo,
+            u.email as maskedEmail,
+            s.created_at as signupTime,
+            s.status as status
+        FROM activity_signup s
+                 LEFT JOIN user u ON s.user_id = u.user_id
+        WHERE s.activity_id = #{activityId}
+        ORDER BY s.created_at DESC
+    </select>
+
 </mapper>
