@@ -3,19 +3,14 @@ package com.club.controller.admin;
 
 import com.club.aspect.LogOperation;
 import com.club.entity.Club;
+import com.club.entity.ClubCategory;
 import com.club.entity.User;
-import com.club.entity.request.AdminLoginDto;
-import com.club.entity.request.ClubApprovalDto;
-import com.club.entity.request.ClubQueryDto;
-import com.club.entity.request.UserQueryDto;
+import com.club.entity.request.*;
 import com.club.entity.vo.AdminLoginVo;
 import com.club.entity.vo.Result;
 import com.club.entity.vo.ResultCodeEnum;
 import com.club.entity.vo.ValidateCodeVo;
-import com.club.service.AdminService;
-import com.club.service.ClubService;
-import com.club.service.UserService;
-import com.club.service.ValidateCodeService;
+import com.club.service.*;
 import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +18,8 @@ import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 平台管理员相关接口
@@ -44,6 +41,12 @@ public class AdminController {
 
     @Autowired
     private ClubService clubService;
+
+    @Autowired
+    private ClubCategoryService clubCategoryService;
+
+    @Autowired
+    private ActivityService activityService;
 
     @LogOperation("管理员登录")
     @Operation(summary = "管理员登录接口")
@@ -124,5 +127,43 @@ public class AdminController {
         clubService.approveClub(approvalDto);
         return Result.build(null, ResultCodeEnum.SUCCESS);
     }
+
+    // ======================== 社团分类管理接口 ========================
+    @Operation(summary = "获取所有分类列表", description = "查询系统中所有的社团分类（按排序号升序）")
+    @GetMapping("/category/list")
+    public Result<List<ClubCategory>> getAllCategories() {
+        return clubCategoryService.getAllCategories();
+    }
+
+    @Operation(summary = "获取分类详情", description = "根据ID查询分类详情")
+    @GetMapping("/category/{categoryId}")
+    public Result<ClubCategory> getCategoryById(@PathVariable Integer categoryId) {
+        return clubCategoryService.getCategoryById(categoryId);
+    }
+
+    @Operation(summary = "新增分类", description = "创建新的社团分类（需输入名称和排序序号）")
+    @PostMapping("/category")
+    public Result<Void> addCategory(@RequestBody ClubCategory category) {
+        return clubCategoryService.addCategory(category);
+    }
+
+    @Operation(summary = "更新分类", description = "修改已有的社团分类信息")
+    @PutMapping("/category")
+    public Result<Void> updateCategory(@RequestBody ClubCategory category) {
+        return clubCategoryService.updateCategory(category);
+    }
+
+    @Operation(summary = "删除分类", description = "删除指定的社团分类（已关联社团的分类不可删除）")
+    @DeleteMapping("/category/{categoryId}")
+    public Result<Void> deleteCategory(@PathVariable Integer categoryId) {
+        return clubCategoryService.deleteCategory(categoryId);
+    }
+
+    @Operation(summary = "查询活动列表", description = "管理员查询活动列表，支持按状态、时间范围、社团名称筛选")
+    @GetMapping("/activity/list")
+    public Result<?> getActivityList(ActivityQueryDto queryDto) {
+        return activityService.getActivityListForAdmin(queryDto);
+    }
+
 
 }

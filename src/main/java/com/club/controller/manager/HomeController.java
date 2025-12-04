@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Slf4j
-@RestController
+@RestController("manager2ActivityController")
 @RequestMapping("/home")
 @Tag(name = "首页管理", description = "首页社团推荐接口")
 public class HomeController {

@@ -3,7 +3,9 @@ package com.club.service.impl;
 import com.club.entity.Activity;
 import com.club.entity.Club;
 import com.club.entity.ClubMember;
+import com.club.entity.request.ActivityQueryDto;
 import com.club.entity.vo.ActivityCreateRequestVO;
+import com.club.entity.vo.ActivityVO;
 import com.club.entity.vo.Result;
 import com.club.entity.vo.ResultCodeEnum;
 import com.club.mapper.ActivityMapper;
@@ -42,6 +44,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private ActivitySignupMapper activitySignupMapper;
+
 
     @Override
     public Result<Void> createActivity(ActivityCreateRequestVO request) {
@@ -290,4 +293,37 @@ public class ActivityServiceImpl implements ActivityService {
             return Result.build(null, ResultCodeEnum.SYSTEM_ERROR.getCode(), "查询失败，请稍后重试");
         }
     }
+
+    @Override
+    public Result<?> getActivityListForAdmin(ActivityQueryDto queryDto) {
+        try {
+            // 确保分页参数有效
+            if (queryDto.getPageNum() == null || queryDto.getPageNum() < 1) {
+                queryDto.setPageNum(1);
+            }
+            if (queryDto.getPageSize() == null || queryDto.getPageSize() < 1) {
+                queryDto.setPageSize(10);
+            }
+
+            // 计算正确的偏移量
+            int offset = (queryDto.getPageNum() - 1) * queryDto.getPageSize();
+
+            // 查询数据
+            List<ActivityVO> activities = activityMapper.selectActivityListForAdmin(queryDto, offset);
+            int total = activityMapper.countActivityListForAdmin(queryDto);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("list", activities);
+            result.put("total", total);
+            result.put("pages", (total + queryDto.getPageSize() - 1) / queryDto.getPageSize());
+            result.put("pageNum", queryDto.getPageNum());
+            result.put("pageSize", queryDto.getPageSize());
+
+            return Result.build(result, ResultCodeEnum.SUCCESS.getCode(), "查询成功");
+        } catch (Exception e) {
+            log.error("查询活动列表失败", e);
+            return Result.build(null, ResultCodeEnum.SYSTEM_ERROR.getCode(), "查询失败");
+        }
+    }
+
 }

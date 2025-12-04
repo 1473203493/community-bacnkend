@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * @author zyh
  * @date 2025/11/11
  */
-@RestController
+@RestController("student1ActivityController")
 @RequestMapping("/api/activity")
 @Tag(name = "活动模块", description = "活动相关接口")
 public class ActivityController {

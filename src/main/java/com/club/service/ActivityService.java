@@ -1,6 +1,7 @@
 package com.club.service;
 
 import com.club.entity.Activity;
+import com.club.entity.request.ActivityQueryDto;
 import com.club.entity.vo.ActivityCreateRequestVO;
 import com.club.entity.vo.Result;
 
@@ -65,4 +66,9 @@ public interface ActivityService {
      * @return 参加的活动列表
      */
     Result<?> getMyActivities(Long userId);
+
+    /**
+     * 管理员查询活动列表
+     */
+    Result<?> getActivityListForAdmin(ActivityQueryDto queryDto);
 }

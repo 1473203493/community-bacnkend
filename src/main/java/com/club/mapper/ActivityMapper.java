@@ -1,6 +1,8 @@
 package com.club.mapper;
 
 import com.club.entity.Activity;
+import com.club.entity.request.ActivityQueryDto;
+import com.club.entity.vo.ActivityVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -43,4 +45,16 @@ public interface ActivityMapper {
      * 查询社团最近的N个活动
      */
     List<Map<String, Object>> selectRecentActivitiesByClubId(@Param("clubId") Long clubId, @Param("limit") Integer limit);
+
+    /**
+     * 管理员查询活动列表
+     */
+    // 在 ActivityMapper.java 中更新方法签名
+    List<ActivityVO> selectActivityListForAdmin(@Param("queryDto") ActivityQueryDto queryDto, @Param("offset") int offset);
+
+
+    /**
+     * 统计符合条件的活动数量
+     */
+    int countActivityListForAdmin(@Param("queryDto") ActivityQueryDto queryDto);
 }

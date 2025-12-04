@@ -14,4 +14,39 @@
         order_no
     </sql>
 
+    <insert id="insertByAdmin" parameterType="com.club.entity.ClubCategory" useGeneratedKeys="true" keyProperty="categoryId">
+        INSERT INTO club_category (name, order_no)
+        VALUES (#{name}, #{orderNo})
+    </insert>
+
+    <update id="updateByAdmin" parameterType="com.club.entity.ClubCategory">
+        UPDATE club_category
+        SET name = #{name},
+            order_no = #{orderNo}
+        WHERE category_id = #{categoryId}
+    </update>
+
+    <delete id="deleteByIdByAdmin" parameterType="java.lang.Integer">
+        DELETE FROM club_category WHERE category_id = #{categoryId}
+    </delete>
+
+
+    <select id="selectByIdByAdmin" parameterType="java.lang.Integer" resultMap="ClubCategoryMap">
+        SELECT <include refid="table_columns"/> FROM club_category WHERE category_id = #{categoryId}
+    </select>
+
+    <select id="countClubsByCategoryIdByAdmin" parameterType="java.lang.Integer" resultType="int">
+        SELECT COUNT(*) FROM club WHERE category_id = #{categoryId}
+    </select>
+
+    <select id="countByNameByAdmin" resultType="int">
+        SELECT COUNT(*) FROM club_category
+        WHERE name = #{name}
+        <if test="excludeId != null">AND category_id != #{excludeId}</if>
+    </select>
+
+    <select id="selectAllByAdmin" resultMap="ClubCategoryMap">
+        SELECT <include refid="table_columns"/> FROM club_category ORDER BY order_no ASC
+    </select>
+
 </mapper>

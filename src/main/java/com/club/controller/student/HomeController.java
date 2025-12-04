@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("student2ActivityController")
 @RequestMapping("/api/home")
 @Tag(name = "首页展示", description = "首页相关接口")
 @Slf4j
