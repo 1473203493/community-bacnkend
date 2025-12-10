@@ -1,7 +1,6 @@
 package com.club.controller.manager;
 
-
-import com.club.entity.ActivitySignup;
+import com.club.entity.vo.ActivitySignupVO;
 import com.club.entity.vo.AuditSignupRequest;
 import com.club.entity.vo.Result;
 import com.club.service.ActivitySignupService;
@@ -22,7 +21,7 @@ public class ActivitySignupController {
 
     @GetMapping("/{activityId}/signups")
     @Operation(summary = "查看活动报名列表")
-    public Result<List<ActivitySignup>> listSignups(
+    public Result<List<ActivitySignupVO>> listSignups(
             @PathVariable Integer activityId,
             @RequestParam Integer operatorId
     ) {
@@ -40,10 +39,9 @@ public class ActivitySignupController {
         );
     }
 
-
     @GetMapping("/{activityId}/signups/pending")
     @Operation(summary = "查看未审核报名")
-    public Result<List<ActivitySignup>> listPendingSignups(
+    public Result<List<ActivitySignupVO>> listPendingSignups(
             @PathVariable Integer activityId,
             @RequestParam Integer operatorId
     ) {
@@ -52,11 +50,10 @@ public class ActivitySignupController {
 
     @GetMapping("/{activityId}/signups/approved")
     @Operation(summary = "查看已通过报名")
-    public Result<List<ActivitySignup>> listApprovedSignups(
+    public Result<List<ActivitySignupVO>> listApprovedSignups(
             @PathVariable Integer activityId,
             @RequestParam Integer operatorId
     ) {
         return activitySignupService.listApprovedSignups(activityId, operatorId);
     }
-
 }

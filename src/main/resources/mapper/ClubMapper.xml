@@ -105,4 +105,26 @@
     </select>
 
 
+    <select id="selectByIdByAdmin" parameterType="java.lang.Integer" resultMap="ClubMap">
+        SELECT
+            c.*,
+            u.name as founder_name,
+            u.email as founder_email,
+            u.student_no as founder_student_no,
+            cc.name as category_name
+        FROM club c
+                 LEFT JOIN user u ON c.founder_id = u.user_id
+                 LEFT JOIN club_category cc ON c.category_id = cc.category_id
+        WHERE c.club_id = #{clubId}
+    </select>
+
+    <update id="updateApprovalStatus" parameterType="com.club.entity.request.ClubApprovalDto">
+        UPDATE club
+        SET status = #{status}
+        <if test="status == '4' and rejectReason != null">
+            , charter = CONCAT(charter, '\n\n【审批驳回理由】：', #{rejectReason})
+        </if>
+        WHERE club_id = #{clubId}
+    </update>
+
 </mapper>

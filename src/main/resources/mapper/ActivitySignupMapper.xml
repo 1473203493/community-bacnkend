@@ -48,7 +48,7 @@
         SELECT COUNT(*)
         FROM activity_signup
         WHERE activity_id = #{activityId}
-        AND status = '1'  <!-- 1表示通过 -->
+          AND status = '2'
     </select>
 
     <!-- 查询某活动未审核的报名 -->
@@ -69,4 +69,73 @@
         ORDER BY created_at ASC
     </select>
 
+    <!-- VO 查询（所有） -->
+    <select id="selectSignupVOsByActivityId" resultType="com.club.entity.vo.ActivitySignupVO">
+        SELECT
+            s.signup_id AS signupId,
+            s.activity_id AS activityId,
+            a.title AS activityTitle,
+            s.user_id AS userId,
+            u.name AS userName,
+            s.status,
+            s.reason,
+            s.created_at AS createdAt
+        FROM activity_signup s
+                 LEFT JOIN activity a ON s.activity_id = a.activity_id
+                 LEFT JOIN user u ON s.user_id = u.user_id
+        WHERE s.activity_id = #{activityId}
+        ORDER BY s.created_at ASC
+    </select>
+
+    <!-- VO：未审核（status=1） -->
+    <select id="selectPendingSignupVOs" resultType="com.club.entity.vo.ActivitySignupVO">
+        SELECT
+            s.signup_id AS signupId,
+            s.activity_id AS activityId,
+            a.title AS activityTitle,
+            s.user_id AS userId,
+            u.name AS userName,
+            s.status,
+            s.reason,
+            s.created_at AS createdAt
+        FROM activity_signup s
+                 LEFT JOIN activity a ON s.activity_id = a.activity_id
+                 LEFT JOIN user u ON s.user_id = u.user_id
+        WHERE s.activity_id = #{activityId}
+          AND s.status = 1
+        ORDER BY s.created_at ASC
+    </select>
+
+    <!-- VO：已通过（status=2） -->
+    <select id="selectApprovedSignupVOs" resultType="com.club.entity.vo.ActivitySignupVO">
+        SELECT
+            s.signup_id AS signupId,
+            s.activity_id AS activityId,
+            a.title AS activityTitle,
+            s.user_id AS userId,
+            u.name AS userName,
+            s.status,
+            s.reason,
+            s.created_at AS createdAt
+        FROM activity_signup s
+                 LEFT JOIN activity a ON s.activity_id = a.activity_id
+                 LEFT JOIN user u ON s.user_id = u.user_id
+        WHERE s.activity_id = #{activityId}
+          AND s.status = 2
+        ORDER BY s.created_at ASC
+    </select>
+
+    <select id="selectSignupUsersByActivityId" resultType="com.club.entity.vo.ActivitySignupUserVO">
+        SELECT
+            s.signup_id as signupId,
+            u.name as name,
+            u.student_no as studentNo,
+            u.email as maskedEmail,
+            s.created_at as signupTime,
+            s.status as status
+        FROM activity_signup s
+                 LEFT JOIN user u ON s.user_id = u.user_id
+        WHERE s.activity_id = #{activityId}
+        ORDER BY s.created_at DESC
+    </select>
 </mapper>

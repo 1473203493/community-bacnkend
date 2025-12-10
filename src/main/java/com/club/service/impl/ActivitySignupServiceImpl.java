@@ -3,6 +3,8 @@ package com.club.service.impl;
 import com.club.entity.Activity;
 import com.club.entity.ActivitySignup;
 import com.club.entity.ClubMember;
+import com.club.entity.vo.ActivitySignupUserVO;
+import com.club.entity.vo.ActivitySignupVO;
 import com.club.entity.vo.Result;
 import com.club.mapper.ActivityMapper;
 import com.club.mapper.ActivitySignupMapper;
@@ -36,12 +38,9 @@ public class ActivitySignupServiceImpl implements ActivitySignupService {
      * @return 报名记录列表
      */
     @Override
-    public Result<List<ActivitySignup>> listSignups(Integer activityId, Integer operatorId) {
-        // 1️⃣ 查询活动是否存在
+    public Result<List<ActivitySignupVO>> listSignups(Integer activityId, Integer operatorId) {
         Activity activity = activityMapper.selectById(activityId);
-        if (activity == null) {
-            return Result.build(null, 404, "活动不存在");
-        }
+        if (activity == null) return Result.build(null, 404, "活动不存在");
 
         // 2️⃣ 检查操作者是否是该社团的管理员(2)或领导(3)
         ClubMember operator = clubMemberMapper.selectMemberByUserIdAndClubId(activity.getClubId(), operatorId);
@@ -49,46 +48,35 @@ public class ActivitySignupServiceImpl implements ActivitySignupService {
             return Result.build(null, 403, "无权限查看报名列表");
         }
 
-        // 3️⃣ 查询报名列表
-        List<ActivitySignup> list = activitySignupMapper.selectByActivityId(activityId);
+        List<ActivitySignupVO> list = activitySignupMapper.selectSignupVOsByActivityId(activityId);
         return Result.build(list, 200, "查询成功");
     }
 
     @Override
-    public Result<List<ActivitySignup>> listPendingSignups(Integer activityId, Integer operatorId) {
-        // 查询活动是否存在
+    public Result<List<ActivitySignupVO>> listPendingSignups(Integer activityId, Integer operatorId) {
         Activity activity = activityMapper.selectById(activityId);
-        if (activity == null) {
-            return Result.build(null, 404, "活动不存在");
-        }
+        if (activity == null) return Result.build(null, 404, "活动不存在");
 
-        // 检查操作者是否有权限
         ClubMember operator = clubMemberMapper.selectMemberByUserIdAndClubId(activity.getClubId(), operatorId);
         if (operator == null || (!"2".equals(operator.getRole()) && !"3".equals(operator.getRole()))) {
-            return Result.build(null, 403, "无权限查看报名列表");
+            return Result.build(null, 403, "无权限查看未审核列表");
         }
 
-        // 查询未审核报名 status=1
-        List<ActivitySignup> list = activitySignupMapper.selectPendingByActivityId(activityId);
+        List<ActivitySignupVO> list = activitySignupMapper.selectPendingSignupVOs(activityId);
         return Result.build(list, 200, "查询成功");
     }
 
     @Override
-    public Result<List<ActivitySignup>> listApprovedSignups(Integer activityId, Integer operatorId) {
-        // 查询活动是否存在
+    public Result<List<ActivitySignupVO>> listApprovedSignups(Integer activityId, Integer operatorId) {
         Activity activity = activityMapper.selectById(activityId);
-        if (activity == null) {
-            return Result.build(null, 404, "活动不存在");
-        }
+        if (activity == null) return Result.build(null, 404, "活动不存在");
 
-        // 检查操作者是否有权限
         ClubMember operator = clubMemberMapper.selectMemberByUserIdAndClubId(activity.getClubId(), operatorId);
         if (operator == null || (!"2".equals(operator.getRole()) && !"3".equals(operator.getRole()))) {
-            return Result.build(null, 403, "无权限查看报名列表");
+            return Result.build(null, 403, "无权限查看已通过列表");
         }
 
-        // 查询已通过报名 status=2
-        List<ActivitySignup> list = activitySignupMapper.selectApprovedByActivityId(activityId);
+        List<ActivitySignupVO> list = activitySignupMapper.selectApprovedSignupVOs(activityId);
         return Result.build(list, 200, "查询成功");
     }
 
@@ -103,17 +91,12 @@ public class ActivitySignupServiceImpl implements ActivitySignupService {
      */
     @Override
     public Result<Void> auditSignup(Integer signupId, Integer operatorId, String status, String reason) {
-        // 1️⃣ 查询报名记录是否存在
         ActivitySignup signup = activitySignupMapper.selectById(signupId);
-        if (signup == null) {
-            return Result.build(null, 404, "报名记录不存在");
-        }
+        if (signup == null) return Result.build(null, 404, "报名记录不存在");
 
         // 2️⃣ 查询报名所属活动
         Activity activity = activityMapper.selectById(signup.getActivityId());
-        if (activity == null) {
-            return Result.build(null, 404, "活动不存在");
-        }
+        if (activity == null) return Result.build(null, 404, "活动不存在");
 
         // 3️⃣ 权限验证：操作者必须是副部长(2)或部长(3)
         ClubMember operator = clubMemberMapper.selectMemberByUserIdAndClubId(activity.getClubId(), operatorId);
@@ -145,5 +128,39 @@ public class ActivitySignupServiceImpl implements ActivitySignupService {
         // emailService.sendAuditResult(signup.getUserId(), activity, status, reason);
 
         return Result.build(null, 200, "审核成功");
+    }
+
+    @Override
+    public Result<List<ActivitySignupUserVO>> getSignupUsersForAdmin(Integer activityId) {
+        // 1. 检查活动是否存在
+        Activity activity = activityMapper.selectById(activityId);
+        if (activity == null) {
+            return Result.build(null, 404, "活动不存在");
+        }
+
+        // 2. 查询该活动的所有报名用户信息
+        List<ActivitySignupUserVO> signupUsers = activitySignupMapper.selectSignupUsersByActivityId(activityId);
+
+        // 3. 对邮箱进行脱敏处理
+        signupUsers.forEach(vo -> {
+            if (vo.getMaskedEmail() != null && !vo.getMaskedEmail().isEmpty()) {
+                vo.setMaskedEmail(maskEmail(vo.getMaskedEmail()));
+            }
+        });
+
+        return Result.build(signupUsers, 200, "查询成功");
+    }
+
+    // 邮箱脱敏工具方法
+    private String maskEmail(String email) {
+        if (email == null || !email.contains("@")) {
+            return email;
+        }
+        String[] parts = email.split("@");
+        String username = parts[0];
+        if (username.length() <= 3) {
+            return username + "***@" + parts[1];
+        }
+        return username.substring(0, 3) + "***@" + parts[1];
     }
 }

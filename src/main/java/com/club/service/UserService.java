@@ -22,9 +22,9 @@ public interface UserService {
      */
     User getByOpenid(String openid);
 
-
     /**
      * 微信登出
+     * 
      * @param openid
      */
     void removeUserInfo(String openid);

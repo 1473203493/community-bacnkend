@@ -14,7 +14,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @Slf4j
-@RestController
+@RestController("manager1ActivityController")
 @RequestMapping("/api/activities")
 @Tag(name = "活动管理", description = "活动新增接口")
 public class ActivityController {
