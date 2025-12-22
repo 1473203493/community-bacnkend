@@ -43,6 +43,7 @@
         WHERE signup_id = #{signupId}
     </update>
 
+
     <!-- 统计某活动已通过报名人数 -->
     <select id="countApprovedByActivityId" resultType="int">
         SELECT COUNT(*)
@@ -138,4 +139,10 @@
         WHERE s.activity_id = #{activityId}
         ORDER BY s.created_at DESC
     </select>
+
+    <update id="updateSignupStatus">
+        UPDATE activity_signup
+        SET status = #{status}
+        WHERE signup_id = #{signupId}
+    </update>
 </mapper>

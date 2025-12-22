@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 @Schema(description = "社团成员表")
 public class ClubMember {
 
+    //申请（加入）状态joinStatus，1.待确定，2.已加入（同意），3.拒绝
+    public static final String JOIN_STATUS_WAIT = "1";
+    public static final String JOIN_STATUS_JOINED = "2";
+    public static final String JOIN_STATUS_REJECT = "3";
+
+
     @Schema(description = "成员ID")
     private Integer memberId;
 

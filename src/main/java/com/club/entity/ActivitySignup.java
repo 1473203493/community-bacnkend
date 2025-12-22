@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 @Schema(description = "活动报名表")
 public class ActivitySignup {
 
+    //报名状态status，1.待确定（社团管理员），2.同意，3.被拒绝，4.活动结束了
+    public static final String STATUS_WAITING = "1";
+    public static final String STATUS_AGREE = "2";
+    public static final String STATUS_REJECT = "3";
+    public static final String STATUS_END = "4";
+
     @Schema(description = "报名ID")
     private Integer signupId;
 

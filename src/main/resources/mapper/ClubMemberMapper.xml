@@ -22,6 +22,20 @@
         joined_at
     </sql>
 
+    <insert id="insert">
+        INSERT INTO club_member (
+        <include refid="table_columns"/>
+        ) VALUES (
+        #{memberId},
+        #{clubId},
+        #{userId},
+        #{role},
+        #{joinStatus},
+        #{applyReason},
+        #{joinedAt}
+        )
+    </insert>
+
     <!-- 根据社团ID和用户ID查询成员 -->
     <select id="selectMemberByUserIdAndClubId" resultMap="ClubMemberMap">
         SELECT *

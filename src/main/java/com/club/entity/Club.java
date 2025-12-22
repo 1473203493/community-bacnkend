@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 @Schema(description = "社团信息表")
 public class Club {
 
+    //社团状态status 1.待平台管理员确认，2.启动（激活）3.停用 4.拒绝（被平台管理员拒绝）
+    public static final String STATUS_WAITING = "1";
+    public static final String STATUS_ACTIVE = "2";
+    public static final String STATUS_FROZEN = "3";
+    public static final String STATUS_REJECTED = "4";
+
     @Schema(description = "社团ID")
     private Integer clubId;
 

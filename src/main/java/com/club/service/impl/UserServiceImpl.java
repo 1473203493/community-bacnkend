@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
         // 构造返回结果
         userLoginVo = UserLoginVo.builder()
-                .id(Long.valueOf(user.getUserId()))
+                .id(user.getUserId().longValue())
                 .openid(user.getOpenid())
                 .token(token)
                 .build();
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
         // }
 
         // 验证用户是否存在
-        User user = userMapper.getUserById(Long.valueOf(userId));
+        User user = userMapper.getUserById(userId);
         if (user == null) {
             throw new ClubDefinedException(ResultCodeEnum.USER_NOT_EXIST);
         }

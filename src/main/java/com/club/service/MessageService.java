@@ -1,13 +1,10 @@
 package com.club.service;
 
+import com.club.entity.message.dto.MessageAdminExamineDto;
+import com.club.entity.message.dto.MessageManagerDto;
+import com.club.entity.message.dto.MessageManagerExamineDto;
+import com.club.entity.message.dto.MessageUserDto;
 import com.club.entity.vo.Result;
-import com.club.entity.Notification;
-import com.club.websocket.NotificationWebSocketHandler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 消息服务接口
@@ -72,7 +69,37 @@ public interface MessageService {
      * @return 未读消息数量
      */
     Result<?> getUnreadCount(Long userId);
+
+    /**
+     * 申请入社或申请参加活动
+     * 创建并发送通知
+     * 普通学生 -> 社团管理员
+     */
+    void sendNotificationForAdd(MessageUserDto messageUserDto);
+
+    /**
+     * 申请创建社团或创建活动
+     * 创建并发送通知
+     * 社团管理员 -> 平台管理员
+     */
+    void sendNotificationForCreate(MessageManagerDto messageManagerDto);
+
+    /**
+     * 社团管理员审批普通学生申请加入社团或加入活动
+     * 创建并发送通知
+     * 社团管理员 -> 普通学生
+     */
+    void sendNotificationForExamine(MessageManagerExamineDto messageManagerExamineDto);
+
+    /**
+     * 平台管理员审批社团管理员申请创建社团或创建活动
+     * 创建并发送通知
+     * 平台管理员 -> 社团管理员
+     */
+    void sendNotificationForExamineV2(MessageAdminExamineDto messageAdminExamineDto);
 }
+
+
 
 //@Service
 //public class MessageService {

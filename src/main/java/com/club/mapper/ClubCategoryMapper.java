@@ -49,4 +49,6 @@ public interface ClubCategoryMapper {
      * 检查分类名称是否已存在
      */
     int countByNameByAdmin(@Param("name") String name, @Param("excludeId") Integer excludeId);
+
+
 }

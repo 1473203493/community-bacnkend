@@ -14,6 +14,14 @@ import java.time.LocalDateTime;
 @Schema(description = "活动表")
 public class Activity {
 
+    //活动状态status
+    //1.待确定（平台管理员），2.同意（平台管理员），3还在活动时间，4活动结束了，5.活动被拒绝（平台管理员）
+    public static final String STATUS_WAIT = "1";
+    public static final String STATUS_AGREE = "2";
+    public static final String STATUS_DOING = "3";
+    public static final String STATUS_END = "4";
+    public static final String STATUS_REFUSE = "5";
+
     @Schema(description = "活动ID")
     private Integer activityId;
 

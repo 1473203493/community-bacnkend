@@ -53,4 +53,10 @@ public interface ClubMapper {
      * 查询社团负责人信息
      */
     Map<String, Object> selectFounderInfo(@Param("clubId") Long clubId);
+
+    /**
+     * 更新社团状态
+     * @param club
+     */
+    void updateStatus(Club club);
 }

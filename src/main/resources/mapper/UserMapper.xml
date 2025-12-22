@@ -26,7 +26,8 @@
         password,
         role,
         status,
-        created_at
+        created_at，
+        openid
     </sql>
 
     <select id="getUserList" parameterType="com.club.entity.request.UserQueryDto" resultMap="UserMap">
