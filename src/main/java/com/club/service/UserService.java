@@ -2,6 +2,7 @@ package com.club.service;
 
 import com.club.entity.User;
 import com.club.entity.request.UserQueryDto;
+import com.club.entity.request.UserSaveDto;
 import com.club.entity.vo.UserLoginVo;
 import com.github.pagehelper.PageInfo;
 
@@ -32,4 +33,10 @@ public interface UserService {
     PageInfo<User> getUserList(UserQueryDto userQueryDto);
 
     void updateUserStatus(Integer userId, String status);
+
+    /**
+     * 新增用户信息
+     * @param user
+     */
+    void save(UserSaveDto userSaveDto);
 }

@@ -1,6 +1,7 @@
 package com.club.service.impl;
 
 import com.club.entity.User;
+import com.club.entity.request.UserSaveDto;
 import com.club.entity.vo.UserLoginVo;
 import com.club.mapper.UserMapper;
 import com.club.properties.WxProperties;
@@ -50,12 +51,12 @@ public class UserServiceImpl implements UserService {
         // 根据openid查询用户
         User user = userMapper.getByOpenid(openid);
 
-        // 如果用户不存在，则注册新用户
+        UserLoginVo userLoginVo = new UserLoginVo();
+        // 如果用户不存在，则需要注册新用户
         if (user == null) {
-            user = new User();
-            user.setOpenid(openid);
-            user.setCreatedAt(LocalDateTime.now());
-            userMapper.save(user);
+            userLoginVo.setRegistered(false);
+        }else {
+            userLoginVo.setRegistered(true);
         }
 
         // 生成JWT token
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         String token = JwtUtil.createJWT("club-key", 7200000L, claims); // 例如：签发者为"zyh-app"，有效期1小时
 
         // 构造返回结果
-        UserLoginVo userLoginVo = UserLoginVo.builder()
+        userLoginVo = UserLoginVo.builder()
                 .id(Long.valueOf(user.getUserId()))
                 .openid(user.getOpenid())
                 .token(token)
@@ -150,5 +151,31 @@ public class UserServiceImpl implements UserService {
         // 更新用户状态
         userMapper.updateStatus(userId, status);
         log.info("更新用户状态成功，用户ID: {}, 新状态: {}", userId, status);
+    }
+
+    /**
+     * 新增用户信息
+     * @param user
+     */
+    @Override
+    public void save(UserSaveDto userSaveDto) {
+
+        // 调用微信接口获取openid
+        String openid = getOpenidFromWx(userSaveDto.getCode());
+
+        // 根据openid查询用户
+        User user = userMapper.getByOpenid(openid);
+
+        if (user == null) {
+            user = new User();
+            user.setOpenid(openid);
+            user.setStudentNo(userSaveDto.getStudentNo());
+            user.setName(userSaveDto.getName());
+            user.setEmail(userSaveDto.getEmail());
+            user.setRole("1");//创建时默认为普通学生
+            user.setStatus("1");//创建时默认为正常
+            user.setCreatedAt(LocalDateTime.now());
+            userMapper.save(user);
+        }
     }
 }

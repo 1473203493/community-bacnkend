@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 @Schema(description = "用户表（学生和社团管理员）")
 public class User {
 
+    //role的取值
+    //普通学生
+    public static final String ROLE_STUDENT = "1";
+    //社团管理员
+    public static final String ROLE_MANAGER = "2";
+
     @Schema(description = "用户ID")
     private Integer userId;
 

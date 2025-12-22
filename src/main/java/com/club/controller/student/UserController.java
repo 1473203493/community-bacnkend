@@ -1,6 +1,7 @@
 package com.club.controller.student;
 
 import com.club.entity.User;
+import com.club.entity.request.UserSaveDto;
 import com.club.entity.vo.Result;
 import com.club.entity.vo.ResultCodeEnum;
 import com.club.entity.vo.UserLoginVo;
@@ -35,6 +36,16 @@ public class UserController {
         // 调用服务层处理登录逻辑
         UserLoginVo userLoginVo = userService.wxLogin(code);
         return Result.build(userLoginVo, ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 新增用户信息
+     */
+    @Operation(summary = "新增用户信息")
+    @PostMapping("/save")
+    public Result<String> save(@RequestBody UserSaveDto userSaveDto) {
+        userService.save(userSaveDto);
+        return Result.build(null, ResultCodeEnum.SUCCESS);
     }
 
     /**

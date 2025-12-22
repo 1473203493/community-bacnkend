@@ -35,4 +35,7 @@ public class UserLoginVo {
     @Schema(description = "学号")
     private String studentNo;
 
+    @Schema(description = "用户是否已注册")
+    private Boolean registered;
+
 }
