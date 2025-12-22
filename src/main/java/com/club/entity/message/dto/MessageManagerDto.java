@@ -33,6 +33,7 @@ public class MessageManagerDto {
     @Schema(description = "消息内容")
     private String content;
 
+    //创建社团参数
     @Schema(description = "社团名称（如果是创建社团则需要传回  社团名称，社团分类和社团描述，但不需要传回活动名称）")
     private String clubName;
 
@@ -41,6 +42,8 @@ public class MessageManagerDto {
 
     @Schema(description = "社团简介")
     private String description;
+
+    //创建活动参数
 
     @Schema(description = "活动名称（如果是创建活动，则需要传回社团id，但不需要传社团名称和社团分类了；如果活动名称为空，说明是创建社团而不是创建活动）")
     private String activityName;
