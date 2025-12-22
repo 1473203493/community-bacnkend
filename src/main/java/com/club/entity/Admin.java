@@ -17,6 +17,10 @@ import java.time.LocalDateTime;
 @Schema(description = "平台管理员表")
 public class Admin {
 
+    //role的取值
+    //普通管理员
+    public static final String ROLE_ADMIN = "3";
+
     @Schema(description = "用户ID")
     private Integer userId;
 

@@ -6,6 +6,7 @@
         <id property="noticeId" column="notice_id"/>
         <result property="userId" column="user_id"/>
         <result property="adminId" column="admin_id"/>
+        <result property="role" column="role"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
         <result property="isRead" column="is_read"/>
@@ -16,6 +17,7 @@
         notice_id,
         user_id,
         admin_id,
+        role,
         title,
         content,
         is_read,
@@ -23,8 +25,8 @@
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="noticeId">
-        INSERT INTO notification(user_id, admin_id, title, content, is_read, created_at)
-        VALUES (#{userId}, #{adminId}, #{title}, #{content}, #{isRead}, #{createdAt})
+        INSERT INTO notification(user_id, admin_id, role, title, content, is_read, created_at)
+        VALUES (#{userId}, #{adminId},#{role}, #{title}, #{content}, #{isRead}, #{createdAt})
     </insert>
 
 

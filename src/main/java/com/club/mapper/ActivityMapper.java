@@ -57,4 +57,10 @@ public interface ActivityMapper {
      * 统计符合条件的活动数量
      */
     int countActivityListForAdmin(@Param("queryDto") ActivityQueryDto queryDto);
+
+    /**
+     * 更新活动状态
+     * @param activity
+     */
+    void updateStatus(Activity activity);
 }

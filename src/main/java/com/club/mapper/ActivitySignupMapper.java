@@ -6,6 +6,8 @@ import com.club.entity.vo.ActivitySignupVO;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -89,4 +91,20 @@ public interface ActivitySignupMapper {
 
     // 添加方法
     List<ActivitySignupUserVO> selectSignupUsersByActivityId(@Param("activityId") Integer activityId);
+
+    /**
+     * 根据用户ID和活动ID查询报名记录
+     * @param activityId 活动ID
+     * @param userOrAdminId 用户ID或管理员ID
+     * @return 报名记录
+     */
+    @Select("SELECT * FROM activity_signup WHERE activity_id = #{activityId} AND user_id = #{userOrAdminId}")
+    ActivitySignup selectSignupByUserIdAndActivityId(Integer activityId, Integer userOrAdminId);
+
+
+    /**
+     * 更新报名状态
+     * @param activitySignup
+     */
+    void updateSignupStatus(ActivitySignup activitySignup);
 }

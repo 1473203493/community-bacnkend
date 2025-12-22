@@ -23,6 +23,9 @@ public class Notification {
     @Schema(description = "平台管理员")
     private Integer adminId;
 
+    @Schema(description = "（接收方的）角色   （1:普通学生， 2:社团管理员， 3:平台管理员) ")
+    private String role;
+
     @Schema(description = "通知标题")
     private String title;
 

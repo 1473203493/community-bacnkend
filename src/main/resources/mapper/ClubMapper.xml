@@ -127,4 +127,10 @@
         WHERE club_id = #{clubId}
     </update>
 
+    <update id="updateStatus">
+        UPDATE club
+        SET status = #{status}
+        WHERE club_id = #{clubId}
+    </update>
+
 </mapper>
