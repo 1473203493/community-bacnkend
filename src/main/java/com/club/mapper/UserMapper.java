@@ -17,7 +17,7 @@ public interface UserMapper {
      * @return
      */
     @Select("select * from user where user_id = #{userId}")
-    User getUserById(Long userId);
+    User getUserById(Integer userId);
 
     /**
      * 根据微信openid查询用户信息
@@ -52,7 +52,7 @@ public interface UserMapper {
      * @param userId
      * @return
      */
-    default User getById(Long userId) {
+    default User getById(Integer userId) {
         return getUserById(userId);
     }
 
