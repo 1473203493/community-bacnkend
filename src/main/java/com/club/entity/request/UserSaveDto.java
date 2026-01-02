@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserSaveDto {
-    @Schema(description = "微信用户唯一code标识，每个微信用户都是唯一的")
-    private String code;
+    @Schema(description = "每个用户有唯一的openid")
+    private String openid;
 
     @Schema(description = "学号或管理员编号")
     private String studentNo;

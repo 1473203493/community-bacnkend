@@ -160,15 +160,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(UserSaveDto userSaveDto) {
 
-        // 调用微信接口获取openid
-        String openid = getOpenidFromWx(userSaveDto.getCode());
+//        // 调用微信接口获取openid
+//        String openid = getOpenidFromWx(userSaveDto.getCode());
 
         // 根据openid查询用户
-        User user = userMapper.getByOpenid(openid);
+        User user = userMapper.getByOpenid(userSaveDto.getOpenid());
 
         if (user == null) {
             user = new User();
-            user.setOpenid(openid);
+            user.setOpenid(userSaveDto.getOpenid());
             user.setStudentNo(userSaveDto.getStudentNo());
             user.setName(userSaveDto.getName());
             user.setEmail(userSaveDto.getEmail());
